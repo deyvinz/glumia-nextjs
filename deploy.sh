@@ -27,10 +27,10 @@ print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
-# Check if running as root
+# Check if running as root and warn but continue
 if [ "$EUID" -eq 0 ]; then
-    print_error "Please do not run this script as root"
-    exit 1
+    print_warning "Running as root - this is required for some operations"
+    print_warning "Make sure you trust this script before continuing"
 fi
 
 # Check if Docker is installed
@@ -55,6 +55,18 @@ if [ ! -f ".env.production" ]; then
     exit 1
 fi
 
+# Check if SMTP variables are set to placeholder values
+if grep -q "your-email@domain.com" .env.production || grep -q "your-smtp-password" .env.production; then
+    print_error "SMTP configuration not set!"
+    print_warning "Please edit .env.production and replace placeholder values with actual SMTP credentials."
+    print_status "Required variables:"
+    print_status "  - SMTP_USER: Your email address"
+    print_status "  - SMTP_PASS: Your email password or app password"
+    print_status "  - SMTP_FROM: Sender email address"
+    print_status "Run: nano .env.production"
+    exit 1
+fi
+
 # Create necessary directories
 print_status "Creating necessary directories..."
 mkdir -p certbot/conf
@@ -62,7 +74,13 @@ mkdir -p certbot/www
 
 # Set proper permissions
 print_status "Setting up permissions..."
-sudo chown -R $USER:$USER certbot/
+if [ "$EUID" -eq 0 ]; then
+    # Running as root, no need for sudo
+    chown -R $USER:$USER certbot/
+else
+    # Not root, use sudo
+    sudo chown -R $USER:$USER certbot/
+fi
 chmod -R 755 certbot/
 
 # Build and start services
