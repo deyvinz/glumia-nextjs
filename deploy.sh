@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Glumia Solutions Deployment Script
-# This script deploys the application to a VPS with Docker
+# Glumia Solutions VPS Deployment Script
+# This script deploys the Next.js app to a VPS with existing nginx/SSL
 
 set -e
 
-echo "🚀 Starting Glumia Solutions Deployment"
-echo "======================================"
+echo "🚀 Starting Glumia Solutions VPS Deployment"
+echo "============================================="
 
 # Colors for output
 RED='\033[0;31m'
@@ -26,12 +26,6 @@ print_warning() {
 print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
-
-# Check if running as root and warn but continue
-if [ "$EUID" -eq 0 ]; then
-    print_warning "Running as root - this is required for some operations"
-    print_warning "Make sure you trust this script before continuing"
-fi
 
 # Check if Docker is installed
 if ! command -v docker &> /dev/null; then
@@ -67,58 +61,72 @@ if grep -q "your-email@domain.com" .env.production || grep -q "your-smtp-passwor
     exit 1
 fi
 
-# Create necessary directories
-print_status "Creating necessary directories..."
-mkdir -p certbot/conf
-mkdir -p certbot/www
+# Set the application port
+APP_PORT=3004
 
-# Set proper permissions
-print_status "Setting up permissions..."
-if [ "$EUID" -eq 0 ]; then
-    # Running as root, no need for sudo
-    chown -R $USER:$USER certbot/
-else
-    # Not root, use sudo
-    sudo chown -R $USER:$USER certbot/
+# Check if port 3004 is available
+if netstat -tuln | grep -q ":3004 "; then
+    print_warning "Port 3004 is already in use!"
+    print_status "Stopping existing container if running..."
+    docker-compose down 2>/dev/null || true
 fi
-chmod -R 755 certbot/
 
-# Build and start services
-print_status "Building Docker images..."
+print_status "Using port $APP_PORT for the application"
+
+# Build and start the application
+print_status "Building Docker image..."
 docker-compose build
 
-print_status "Starting services..."
+print_status "Starting application..."
 docker-compose up -d
 
-# Wait for services to start
-print_status "Waiting for services to start..."
+# Wait for application to start
+print_status "Waiting for application to start..."
 sleep 10
 
-# Check if services are running
-print_status "Checking service status..."
+# Check if application is running
+print_status "Checking application status..."
 docker-compose ps
-
-# Test SSL certificate
-print_status "Testing SSL certificate..."
-if curl -s -o /dev/null -w "%{http_code}" https://glumia.com | grep -q "200"; then
-    print_status "✅ SSL certificate is working!"
-else
-    print_warning "SSL certificate might not be ready yet. It can take a few minutes."
-fi
 
 # Test application
 print_status "Testing application..."
-if curl -s -o /dev/null -w "%{http_code}" https://glumia.com | grep -q "200"; then
-    print_status "✅ Application is running!"
+if curl -s -o /dev/null -w "%{http_code}" http://localhost:$APP_PORT | grep -q "200"; then
+    print_status "✅ Application is running on port $APP_PORT!"
 else
     print_error "Application is not responding. Check logs with: docker-compose logs"
 fi
 
 print_status "🎉 Deployment completed!"
-print_status "Your application is now running at: https://glumia.com"
+print_status ""
+print_status "Next steps:"
+print_status "1. Configure your existing nginx to proxy to this container"
+print_status "2. Add this configuration to your nginx:"
+print_status ""
+echo "server {"
+echo "    listen 443 ssl http2;"
+echo "    server_name glumia.com www.glumia.com;"
+echo ""
+echo "    # Your existing SSL configuration"
+echo "    ssl_certificate /path/to/your/certificate;"
+echo "    ssl_certificate_key /path/to/your/private/key;"
+echo ""
+echo "    location / {"
+echo "        proxy_pass http://127.0.0.1:$APP_PORT;"
+echo "        proxy_http_version 1.1;"
+echo "        proxy_set_header Upgrade \$http_upgrade;"
+echo "        proxy_set_header Connection 'upgrade';"
+echo "        proxy_set_header Host \$host;"
+echo "        proxy_set_header X-Real-IP \$remote_addr;"
+echo "        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;"
+echo "        proxy_set_header X-Forwarded-Proto \$scheme;"
+echo "        proxy_cache_bypass \$http_upgrade;"
+echo "    }"
+echo "}"
+print_status ""
+print_status "Application is running on port: $APP_PORT"
 print_status ""
 print_status "Useful commands:"
 print_status "  View logs: docker-compose logs -f"
-print_status "  Stop services: docker-compose down"
-print_status "  Restart services: docker-compose restart"
+print_status "  Stop application: docker-compose down"
+print_status "  Restart application: docker-compose restart"
 print_status "  Update application: ./deploy.sh"

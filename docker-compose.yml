@@ -16,38 +16,8 @@ services:
       - SMTP_FROM=${SMTP_FROM}
       - SMTP_TO=${SMTP_TO}
       - SMTP_SUBSCRIPTION_BOX=${SMTP_SUBSCRIPTION_BOX}
-    networks:
-      - glumia-network
-    depends_on:
-      - nginx
-
-  # Nginx Reverse Proxy with SSL
-  nginx:
-    image: nginx:alpine
-    container_name: glumia-nginx
-    restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./certbot/conf:/etc/letsencrypt:ro
-      - ./certbot/www:/var/www/certbot:ro
-    networks:
-      - glumia-network
-    depends_on:
-      - certbot
-
-  # Certbot for SSL certificates
-  certbot:
-    image: certbot/certbot
-    container_name: glumia-certbot
-    restart: unless-stopped
-    volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
-    command: certonly --webroot --webroot-path=/var/www/certbot --email admin@glumia.com --agree-tos --no-eff-email -d glumia.com -d www.glumia.com
+      - "3004:3000"
     networks:
       - glumia-network
 
