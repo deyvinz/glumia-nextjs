@@ -1,0 +1,29 @@
+{
+  "name": "Glumia Solutions - Technology & IT Consulting Agency",
+  "short_name": "Glumia Solutions",
+  "description": "Empowering businesses with innovative digital solutions. Custom software development, data analytics, Web3 solutions, and more.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#055fa3",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/assets/img/favicons/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/img/favicons/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": [
+    "business",
+    "productivity",
+    "technology"
+  ],
+  "lang": "en-US",
+  "dir": "ltr"
+}
