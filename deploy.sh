@@ -62,11 +62,11 @@ if grep -q "your-email@domain.com" .env.production || grep -q "your-smtp-passwor
 fi
 
 # Set the application port
-APP_PORT=3004
+APP_PORT=3002
 
-# Check if port 3004 is available
-if netstat -tuln | grep -q ":3004 "; then
-    print_warning "Port 3004 is already in use!"
+# Check if port 3002 is available
+if netstat -tuln | grep -q ":3002 "; then
+    print_warning "Port 3002 is already in use!"
     print_status "Stopping existing container if running..."
     docker-compose down 2>/dev/null || true
 fi
