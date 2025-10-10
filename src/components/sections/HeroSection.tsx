@@ -1,19 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { Button, Card, CardBody } from "@heroui/react";
 import { motion } from "framer-motion";
 import { Play, ArrowRight, Sparkles } from "lucide-react";
 
 export default function HeroSection() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    // Auto-play video when component mounts
-    if (videoRef.current) {
-      videoRef.current.play().catch(console.error);
-    }
-  }, []);
 
   const features = [
     "Custom Software Development",
@@ -24,20 +15,10 @@ export default function HeroSection() {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Video Background */}
-      <div className="absolute inset-0 z-0">
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="w-full h-full object-cover"
-        >
-          <source src="/assets/img/bkg.mp4" type="video/mp4" />
-        </video>
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+      {/* Gradient Background */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800">
+        {/* Additional overlay for better text contrast */}
+        <div className="absolute inset-0 bg-black bg-opacity-30"></div>
       </div>
 
       {/* Content */}
@@ -94,7 +75,7 @@ export default function HeroSection() {
               Get Started Now
             </Button>
 
-            <Button
+            {/* <Button
               as="a"
               href="https://wa.me/19432589932"
               target="_blank"
@@ -105,7 +86,7 @@ export default function HeroSection() {
               startContent={<Play className="w-5 h-5" />}
             >
               Watch Demo
-            </Button>
+            </Button> */}
           </motion.div>
 
           {/* Features Grid */}
