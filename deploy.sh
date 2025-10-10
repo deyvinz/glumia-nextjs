@@ -55,6 +55,18 @@ if [ ! -f ".env.production" ]; then
     exit 1
 fi
 
+# Check if SMTP variables are set to placeholder values
+if grep -q "your-email@domain.com" .env.production || grep -q "your-smtp-password" .env.production; then
+    print_error "SMTP configuration not set!"
+    print_warning "Please edit .env.production and replace placeholder values with actual SMTP credentials."
+    print_status "Required variables:"
+    print_status "  - SMTP_USER: Your email address"
+    print_status "  - SMTP_PASS: Your email password or app password"
+    print_status "  - SMTP_FROM: Sender email address"
+    print_status "Run: nano .env.production"
+    exit 1
+fi
+
 # Create necessary directories
 print_status "Creating necessary directories..."
 mkdir -p certbot/conf
