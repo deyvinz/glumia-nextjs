@@ -256,7 +256,7 @@ export default function ContactSection() {
                     size="lg"
                     isLoading={isSubmitting}
                     disabled={isSubmitting}
-                    className="w-full font-semibold"
+                    className="w-full font-semibold bg-primary-500"
                     startContent={!isSubmitting && <Send className="w-4 h-4" />}
                   >
                     {isSubmitting ? 'Sending...' : 'Send Message'}
