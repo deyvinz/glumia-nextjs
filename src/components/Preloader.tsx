@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 export default function Preloader() {
   const [isLoading, setIsLoading] = useState(true);
@@ -23,10 +24,12 @@ export default function Preloader() {
       <div id="loader" className="text-center">
         <div className="animation-preloader">
           <div className="logo-loader mb-4">
-            <img 
+            <Image 
               src="/assets/img/logo.svg" 
               alt="Glumia" 
               className="w-16 h-16 animate-pulse"
+              width={64}
+              height={64}
             />
           </div>
           <div className="text-primary-500 font-semibold text-lg">

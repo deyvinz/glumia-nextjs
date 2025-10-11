@@ -85,7 +85,7 @@ export default function Header() {
               <div className="hidden md:block">
                 <div className="flex items-center space-x-6 text-sm">
                   <div className="flex items-center text-gray-600 hover:text-primary-500 transition-colors">
-                    <img alt="Chat on WhatsApp" src="/assets/img/whatsapp-gark-green.svg" width={15} className="mr-1" />
+                    <Image alt="Chat on WhatsApp" src="/assets/img/whatsapp-gark-green.svg" width={15} height={15} className="mr-1" />
                     <a
                       target="_blank"
                       rel="noopener noreferrer"
@@ -185,7 +185,7 @@ export default function Header() {
                   variant="bordered"
                   className="font-semibold"
                   startContent={
-                    <img alt="Chat on WhatsApp" src="/assets/img/whatsapp-gark-green.svg" width={20} />
+                    <Image alt="Chat on WhatsApp" src="/assets/img/whatsapp-gark-green.svg" width={20} height={20} />
                   }
                 >
                   Chat on WhatsApp

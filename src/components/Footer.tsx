@@ -162,7 +162,7 @@ export default function Footer() {
                   <form onSubmit={handleNewsletterSubmit} className="newsletter-form">
                     <div className="form-group flex">
                       <input
-                        className="form-control flex-1 px-4 py-3 rounded-l-lg border-0 focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                        className="form-control flex-1 px-4 py-3 rounded-l-lg border-1 border-primary-500 focus:ring-2 focus:ring-primary-500 focus:outline-none"
                         type="email"
                         placeholder="Enter email address"
                         value={email}
@@ -172,7 +172,7 @@ export default function Footer() {
                       />
                       <button
                         type="submit"
-                        className="icon-btn bg-primary-500 hover:bg-primary-600 text-white px-4 py-3 rounded-r-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="icon-btn bg-primary-500 hover:bg-primary-600 text-white px-4 py-3 rounded-r-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed border-1 border-primary-500"
                         aria-label="Subscribe to newsletter"
                         disabled={isSubmitting}
                       >

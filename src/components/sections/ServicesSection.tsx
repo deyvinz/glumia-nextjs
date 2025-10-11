@@ -2,6 +2,7 @@
 
 import { Accordion, AccordionItem } from "@heroui/react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 export default function ServicesSection() {
   const services = [
@@ -147,10 +148,12 @@ export default function ServicesSection() {
                 }
                 startContent={
                   <div className="flex items-center justify-center w-12 h-12 bg-primary-100 rounded-lg">
-                    <img
+                    <Image
                       src={service.icon}
                       alt={service.title}
                       className="w-6 h-6"
+                      width={24}
+                      height={24}
                     />
                   </div>
                 }

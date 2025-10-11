@@ -3,6 +3,7 @@
 import { Card, CardBody, Button } from "@heroui/react";
 import { motion } from "framer-motion";
 import { Code, BarChart3, Link2, MessageCircle } from "lucide-react";
+import Image from "next/image";
 
 export default function CoreFeatures() {
   const features = [
@@ -123,7 +124,7 @@ export default function CoreFeatures() {
                     size="lg"
                     className="bg-white text-primary-500 hover:bg-gray-100 font-semibold px-8 py-4"
                     startContent={
-                      <img alt="Chat on WhatsApp" src="/assets/img/whatsapp-gark-green.svg" width={15} className="mr-1" />
+                      <Image alt="Chat on WhatsApp" src="/assets/img/whatsapp-gark-green.svg" width={15} height={15} className="mr-1" />
 
                     }
                   >
