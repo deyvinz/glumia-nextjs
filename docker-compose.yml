@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+
   # Next.js Application
   glumia-app:
     build:
@@ -8,6 +9,8 @@ services:
       dockerfile: Dockerfile
     container_name: glumia-app
     restart: unless-stopped
+    env_file:
+      - .env.production
     environment:
       - NODE_ENV=production
       - NEXT_PUBLIC_SITE_URL=https://glumia.com
